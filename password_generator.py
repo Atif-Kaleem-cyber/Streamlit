@@ -2,14 +2,15 @@ import streamlit as st
 import random
 import string
 
-def generate_password(length, use_letters=True, use_numbers=True, use_symbols=True):
+def generate_password(length, use_lowercase=True, use_uppercase=True, use_numbers=True, use_symbols=True):
     # Define character sets
-    letters = string.ascii_letters if use_letters else ''
+    lowercase = string.ascii_lowercase if use_lowercase else ''
+    uppercase = string.ascii_uppercase if use_uppercase else ''
     numbers = string.digits if use_numbers else ''
     symbols = string.punctuation if use_symbols else ''
     
     # Combine all selected character sets
-    all_characters = letters + numbers + symbols
+    all_characters = lowercase + uppercase + numbers + symbols
     
     if not all_characters:
         return "Please select at least one character type!"
@@ -35,7 +36,8 @@ def main():
         
         with col1:
             length = st.slider("Password Length", min_value=4, max_value=50, value=12)
-            use_letters = st.checkbox("Include Letters (A-Z, a-z)", value=True)
+            use_lowercase = st.checkbox("Include Lowercase (a-z)", value=True)
+            use_uppercase = st.checkbox("Include Uppercase (A-Z)", value=True)
         
         with col2:
             use_numbers = st.checkbox("Include Numbers (0-9)", value=True)
@@ -43,7 +45,7 @@ def main():
     
     # Generate password button
     if st.button("Generate Password", type="primary"):
-        password = generate_password(length, use_letters, use_numbers, use_symbols)
+        password = generate_password(length, use_lowercase, use_uppercase, use_numbers, use_symbols)
         
         if "Please select" in password:
             st.error(password)
@@ -63,11 +65,11 @@ def main():
     with st.expander("Password Strength Guidelines"):
         st.markdown("""
         - **Weak**: Less than 8 characters
-        - **Medium**: 8-11 characters with a mix of letters and numbers
-        - **Strong**: 12+ characters with a mix of letters, numbers, and symbols
+        - **Medium**: 8-11 characters with a mix of different character types
+        - **Strong**: 12+ characters with a mix of lowercase, uppercase, numbers, and symbols
         
         Tips for strong passwords:
-        1. Use a mix of uppercase and lowercase letters
+        1. Use both uppercase and lowercase letters
         2. Include numbers and special characters
         3. Make it at least 12 characters long
         4. Avoid using personal information
